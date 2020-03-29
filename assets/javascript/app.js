@@ -20,19 +20,32 @@ function startTimer(duration, display) {
     }, 1000);
 }
 
+// Create a var to have the timer run for two minutes
+var twoMinutes;
+
 // When page loads, start a countdown timer of 2 minutes
 $(document).ready(function(){
-    var twoMinutes = 60 * 2,
+    twoMinutes = 60 * 2,
         display = $('#time');
     startTimer(twoMinutes, display);
 });
 
+// Create global vars to hold the user's correct, wrong, and unanswered results
+var correct = 0;
+var wrong = 0;
+var unanswered = 0;
+
+// Create global vars to reference the results text on the html
+var correctAnswersText = $("#correctanswers-text");
+var wrongAnswersText = $("#wronganswers-text");
+var unansweredText = $("#unanswered-text");
+
 // Function to get the score
 function getTheScore() {
     // Vars to hold the score
-    var correct = 0;
-    var wrong = 0;
-    var unanswered = 0;
+    correct = 0;
+    wrong = 0;
+    unanswered = 0;
     // Stop the timer
     clearInterval(timerInterval);
     // Object referencing the question names on the html
@@ -53,10 +66,6 @@ function getTheScore() {
             unanswered++;
         }
     }
-    // Create vars to reference where the score will be posted
-    var correctAnswersText = $("#correctanswers-text");
-    var wrongAnswersText = $("#wronganswers-text");
-    var unansweredText = $("#unanswered-text");
     // Display the score on the page
     correctAnswersText.text("Correct answers: " + correct);
     wrongAnswersText.text("Wrong answers: " + wrong);
@@ -66,4 +75,22 @@ function getTheScore() {
 // When you hit the submit button, the getTheScore function is called
 $("#submit-button").click(function() {
     getTheScore();
+});
+
+// Create a function to restart the game
+function restart() {
+    startTimer(twoMinutes, display);
+    twoMinutes = 60 * 2;
+    correct = 0;
+    wrong = 0;
+    unanswered = 0;
+    correctAnswersText.text("Correct answers: " + correct);
+    wrongAnswersText.text("Wrong answers: " + wrong);
+    unansweredText.text("Unanswered questions: " + unanswered);
+    $('input[type="radio"]').prop('checked', false);
+};
+
+// Calling the restart function so when you hit the restart button, the game resets
+$("#restart-button").click(function() {
+    restart();
 });
